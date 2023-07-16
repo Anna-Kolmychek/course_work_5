@@ -4,5 +4,5 @@ COMPANIES_ID = [3183420, 2000762, 1579449, 1723062, 4934,
 
 DB_NAME = 'headhunter'
 
-SQL_FILE_NAME = 'queries.sql'
+SQL_FILE_NAME = 'data/queries.sql'
 
