@@ -1,8 +1,14 @@
+-- [drop_db]
+-- Удаление БД
+DROP DATABASE IF EXISTS %s;
+
 -- [create_db]
 -- Создание БД
-DROP DATABASE IF EXISTS %s;
 CREATE DATABASE %s;
 
+-- [is_db_exists]
+-- Проверка наличия БД
+SELECT 1 FROM pg_database WHERE datname=%s;
 
 -- [create_tables]
 -- Создание таблиц для БД
