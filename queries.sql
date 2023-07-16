@@ -36,4 +36,41 @@ INSERT INTO vacancies (vacancy_id,
                        salary_from,
                        salary_to,
                        salary_for_comparison,
-                       vacancy_url) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                       vacancy_url) VALUES (%s, %s, %s, %s, %s, %s, %s);
+
+-- [get_companies_and_vacancies_count]
+-- Получает список всех компаний и количество вакансий у каждой компании.
+SELECT company_name, COUNT(*)
+FROM companies
+    JOIN vacancies USING(company_id)
+GROUP BY company_id;
+
+
+-- [get_all_vacancies]
+-- Получает список всех вакансий с указанием названия компании,
+-- названия вакансии, зарплаты и ссылки на вакансию."""
+SELECT company_name, vacancy_name, salary_from, salary_to, vacancy_url
+FROM companies
+	JOIN vacancies USING(company_id);
+
+
+-- [get_avg_salary]
+-- Получает среднюю зарплату по вакансиям.
+SELECT AVG(salary_for_comparison) FROM vacancies;
+
+
+-- [get_vacancies_with_higher_salary]
+-- Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям.
+SELECT company_name, vacancy_name, salary_from, salary_to, vacancy_url
+FROM companies
+	JOIN vacancies USING(company_id)
+WHERE salary_for_comparison > %s;
+
+
+-- [get_vacancies_with_keyword]
+-- Получает список всех вакансий, в названии которых содержатся переданные в метод слова,
+-- например “python”.
+SELECT company_name, vacancy_name, salary_from, salary_to, vacancy_url
+FROM companies
+	JOIN vacancies USING(company_id)
+WHERE vacancy_name LIKE %s;
