@@ -1,5 +1,5 @@
 .idea/
 __pycache__/
-database.ini
+config/database.ini
 poetry.lock
-data.json
+config/data.json

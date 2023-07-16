@@ -1,11 +1,7 @@
-import json
-
 import psycopg2
 
-from config import config
-from parser_sql import get_sql_requests
-from hh_api import get_hh_data
-from constants import DB_NAME
+from src.hh_api import get_hh_data
+from config.constants import DB_NAME
 
 
 class DBManager:
@@ -54,8 +50,9 @@ class DBManager:
             cur.execute(self.sql_requests['get_avg_salary'])
             db_data = cur.fetchall()
         conn.close()
+        result = {'avg_salary': int(db_data[0][0])}
 
-        return int(db_data[0][0])
+        return result
 
     def get_vacancies_with_higher_salary(self):
         """Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям."""
@@ -96,7 +93,6 @@ class DBManager:
 
         return result
 
-
     def create_db(self) -> None:
         """Создает базу данных для работодателей и вакансий
            При наличии БД удаляет старые данные"""
@@ -116,12 +112,11 @@ class DBManager:
         # Используем запрос из queries.sql под секцией [create_tables]
         conn = psycopg2.connect(dbname=self.db_name, **self.db_params)
         with conn.cursor() as cur:
-            cur.execute(sql_requests['create_tables'])
+            cur.execute(self.sql_requests['create_tables'])
         conn.commit()
         conn.close()
 
-        print('-'*10, f'БД {self.db_name} создана', '-'*10)
-
+        print('-' * 10, f'БД {self.db_name} создана', '-' * 10)
 
     def put_data_to_db(self) -> None:
         """Вызывает функцию получения данных с HH,
@@ -135,7 +130,7 @@ class DBManager:
                 company_id = int(item['company']['id'])
                 # Заполняем данные по компании.
                 # Используем запрос из queries.sql под секцией [put_data_in_table_companies]
-                cur.execute(sql_requests['put_data_in_table_companies'],
+                cur.execute(self.sql_requests['put_data_in_table_companies'],
                             (company_id,
                              item['company']['name'],
                              item['company']['alternate_url']))
@@ -161,7 +156,7 @@ class DBManager:
 
                     # Заполняем данные по вакансии.
                     # Используем запрос из queries.sql под секцией [put_data_in_table_vacancies]
-                    cur.execute(sql_requests['put_data_in_table_vacancies'],
+                    cur.execute(self.sql_requests['put_data_in_table_vacancies'],
                                 (vacancy['id'],
                                  company_id,
                                  vacancy['name'],
@@ -173,14 +168,4 @@ class DBManager:
         conn.commit()
         conn.close()
 
-        print('-'*10, f'Данные с HeadHunter в БД {self.db_name} загружены', '-'*10)
-
-
-
-db_name = 'test3'
-sql_requests = get_sql_requests()
-db_params = config()
-#
-db_manager = DBManager(db_params, sql_requests, db_name)
-res = db_manager.is_db_exists()
-print(res)
+        print('-' * 10, f'Данные с HeadHunter в БД {self.db_name} загружены', '-' * 10)

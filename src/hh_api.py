@@ -1,5 +1,5 @@
 import requests
-from constants import COMPANIES_ID
+from config.constants import COMPANIES_ID
 
 
 def get_hh_data(companies_id: list[int] = COMPANIES_ID) -> list[dict]:
