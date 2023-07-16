@@ -10,7 +10,7 @@ CREATE DATABASE %s;
 -- Проверка наличия БД
 SELECT 1
 FROM pg_database
-WHERE datname =% s;
+WHERE datname = %s;
 
 -- [create_tables]
 -- Создание таблиц для БД
@@ -36,7 +36,7 @@ CREATE TABLE vacancies
 -- [put_data_in_table_companies]
 -- Запись данных в таблицу companies
 INSERT INTO companies (company_id, company_name, company_url)
-VALUES (% s, % s, % s);
+VALUES (%s, %s, %s);
 
 
 -- [put_data_in_table_vacancies]
@@ -48,7 +48,7 @@ INSERT INTO vacancies (vacancy_id,
                        salary_to,
                        salary_for_comparison,
                        vacancy_url)
-VALUES (% s, % s, % s, % s, % s, % s, % s);
+VALUES (%s, %s, %s, %s, %s, %s, %s);
 
 -- [get_companies_and_vacancies_count]
 -- Получает список всех компаний и количество вакансий у каждой компании.
@@ -77,7 +77,7 @@ FROM vacancies;
 SELECT company_name, vacancy_name, salary_from, salary_to, vacancy_url
 FROM companies
          JOIN vacancies USING (company_id)
-WHERE salary_for_comparison > % s;
+WHERE salary_for_comparison > %s;
 
 
 -- [get_vacancies_with_keyword]
@@ -86,4 +86,4 @@ WHERE salary_for_comparison > % s;
 SELECT company_name, vacancy_name, salary_from, salary_to, vacancy_url
 FROM companies
          JOIN vacancies USING (company_id)
-WHERE vacancy_name LIKE % s;
+WHERE vacancy_name LIKE %s;

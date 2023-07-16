@@ -16,6 +16,7 @@ class DBManager:
         else:
             print('-' * 10, f'БД {self.db_name} уже существует', '-' * 10)
 
+
     def get_companies_and_vacancies_count(self) -> list[dict]:
         """Получает список всех компаний и количество вакансий у каждой компании."""
         conn = psycopg2.connect(dbname=self.db_name, **self.db_params)
@@ -56,7 +57,7 @@ class DBManager:
 
     def get_vacancies_with_higher_salary(self):
         """Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям."""
-        salary_avg = self.get_avg_salary()
+        salary_avg = self.get_avg_salary().get('avg_salary')
         conn = psycopg2.connect(dbname=self.db_name, **self.db_params)
         with conn.cursor() as cur:
             cur.execute(self.sql_requests['get_vacancies_with_higher_salary'], [salary_avg])
